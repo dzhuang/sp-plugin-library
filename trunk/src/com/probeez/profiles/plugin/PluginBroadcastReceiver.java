@@ -7,6 +7,7 @@ import static com.probeez.profiles.plugin.PluginIntent.ACTION_QUERY_PLUGIN_STATU
 import static com.probeez.profiles.plugin.PluginIntent.ACTION_START_PLUGIN;
 import static com.probeez.profiles.plugin.PluginIntent.ACTION_STOP_PLUGIN;
 import static com.probeez.profiles.plugin.PluginIntent.EXTRA_PLUGIN_STATUS;
+import static com.probeez.profiles.plugin.PluginIntent.EXTRA_RULE_TRIGGERED;
 import static com.probeez.profiles.plugin.PluginIntent.EXTRA_STATE;
 import static com.probeez.profiles.plugin.PluginIntent.EXTRA_STATES;
 
@@ -57,8 +58,10 @@ public abstract class PluginBroadcastReceiver extends BroadcastReceiver {
 			setResult(RESULT_OK, null, results);
 		} 
 		else if (ACTION_PERFORM_ACTION.equals(action)) {
+			boolean triggered = intent.getBooleanExtra(EXTRA_RULE_TRIGGERED, true);
 			Bundle state = intent.getBundleExtra(EXTRA_STATE);
-			onPerformAction(context, state);
+			if (DEBUG) Log.d(TAG, "Calling onPerformAction, rule triggered:"+triggered);
+			onPerformAction(context, state, triggered);
 		}
 	}
 
@@ -66,7 +69,7 @@ public abstract class PluginBroadcastReceiver extends BroadcastReceiver {
   	return false;
   }
   
-  protected void onPerformAction(Context context, Bundle state) {
+  protected void onPerformAction(Context context, Bundle state, boolean triggered) {
   }
   
   protected void onStartPlugin(Context context) {

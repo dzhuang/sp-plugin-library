@@ -18,6 +18,7 @@ public class PluginIntent extends Intent {
 	public static final String EXTRA_SUMMARY = "summary";
 	public static final String EXTRA_STATE = "state";
 	public static final String EXTRA_STATES = "states";
+	public static final String EXTRA_RULE_TRIGGERED = "rule_triggered";
 	public static final String EXTRA_PLUGIN_STATUS = "plugin_status";
 	public static final String EXTRA_PLUGIN_PACKAGE = "plugin_package";
 	
