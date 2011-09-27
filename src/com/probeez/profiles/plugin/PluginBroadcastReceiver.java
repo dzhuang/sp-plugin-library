@@ -45,16 +45,10 @@ public abstract class PluginBroadcastReceiver extends BroadcastReceiver {
 			setResult(RESULT_OK, null, results);
 		} 
 		else if (ACTION_CHECK_CONDITION.equals(action)) {
-			Bundle sourceState = intent.getBundleExtra(EXTRA_STATE);
-			Bundle targetStates = intent.getBundleExtra(EXTRA_STATES);
-			Set<String> keys = targetStates.keySet();
-			Bundle results = new Bundle(keys.size());
-			for (String key : keys) {
-				Bundle targetState = targetStates.getBundle(key);
-				boolean result = onCheckCondition(context, sourceState, targetState);
-				if (DEBUG) Log.d(TAG, "Check condition:"+key+", result:"+result);
-				results.putBoolean(key, result);
-			}
+			Bundle results = onCheckConditionList(context, 
+					intent.getBundleExtra(EXTRA_STATE), 
+					intent.getBundleExtra(EXTRA_STATES)
+				);
 			setResult(RESULT_OK, null, results);
 		} 
 		else if (ACTION_PERFORM_ACTION.equals(action)) {
@@ -65,7 +59,19 @@ public abstract class PluginBroadcastReceiver extends BroadcastReceiver {
 		}
 	}
 
-  protected boolean onCheckCondition(Context context, Bundle sourceState, Bundle targetState) {
+  protected Bundle onCheckConditionList(Context context, Bundle sourceState, Bundle targetStates) {
+		Set<String> keys = targetStates.keySet();
+		Bundle results = new Bundle(keys.size());
+		for (String key : keys) {
+			Bundle targetState = targetStates.getBundle(key);
+			boolean result = onCheckCondition(context, sourceState, targetState);
+			if (DEBUG) Log.d(TAG, "Check condition:"+key+", result:"+result);
+			results.putBoolean(key, result);
+		}
+		return results;
+  }
+
+	protected boolean onCheckCondition(Context context, Bundle sourceState, Bundle targetState) {
   	return false;
   }
   
